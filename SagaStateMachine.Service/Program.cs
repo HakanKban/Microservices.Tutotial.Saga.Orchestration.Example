@@ -1,18 +1,24 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using SagaStateMachine.Service.StateInstance;
+using SagaStateMachine.Service.StateMachine;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddMassTransit(conf =>
 {
-    //conf.AddConsumer<OrderCreatedEventConsumer>();
-    //conf.AddConsumer<PaymentFailedEventConsumer>();
+    conf.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>()
+    .EntityFrameworkRepository(opt =>
+    {
+        opt.AddDbContext<DbContext, OrderStateDbContext>((provider, _builder) =>
+        {
+            _builder.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL"));
+        });
+    });
+
+
     conf.UsingRabbitMq((context, _conf) =>
     {
         _conf.Host("localhost");
-        //_conf.ReceiveEndpoint(RabbitMQSettings.Stock_OrderCreatedEventQueue,
-        //    e => e.ConfigureConsumer<OrderCreatedEventConsumer>(context));
-
-        //_conf.ReceiveEndpoint(RabbitMQSettings.Stock_PaymentFailedEventQueue,
-        //    e => e.ConfigureConsumer<PaymentFailedEventConsumer>(context));
 
     });
 });
