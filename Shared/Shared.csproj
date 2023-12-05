@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="StockEvents\" />
-    <Folder Include="PaymentEvents\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.1.2" />
   </ItemGroup>
 
