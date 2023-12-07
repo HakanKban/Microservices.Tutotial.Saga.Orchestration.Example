@@ -1,4 +1,6 @@
-﻿namespace Shared.OrderEvents;
+﻿using Shared.Messages;
+
+namespace Shared.OrderEvents;
 
 public class OrderStartedEvent
 {
